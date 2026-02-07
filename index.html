@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nadi Plast | نادي بلاست</title>
+    
+    <!-- Fonts: Cairo for Arabic, Roboto for English -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (FontAwesome CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CSS Variables & Theming --- */
+        :root {
+            --primary-color: #00897b; /* Teal for Plast/Industrial feel */
+            --primary-dark: #005b4f;
+            --accent-color: #ffb300;
+            --bg-body: #f4f7f6;
+            --bg-card: #ffffff;
+            --text-main: #333333;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+            --radius: 12px;
+            --font-ar: 'Cairo', sans-serif;
+            --font-en: 'Roboto', sans-serif;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4db6ac;
+            --primary-dark: #00897b;
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --text-main: #e0e0e0;
+            --text-secondary: #aaaaaa;
+            --border-color: #333333;
+            --shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        /* --- Global Reset --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-ar);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+            padding-bottom: 80px; /* Space for mobile nav if needed */
+        }
+
+        body.lang-en { font-family: var(--font-en); }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        button { cursor: pointer; border: none; font-family: inherit; }
+
+        /* --- Header & Nav --- */
+        header {
+            background-color: var(--bg-card);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i { font-size: 1.8rem; }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon-btn {
+            background: transparent;
+            color: var(--text-main);
+            font-size: 1.2rem;
+            padding: 8px;
+            border-radius: 50%;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            background-color: rgba(0,0,0,0.05);
+            color: var(--primary-color);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px; /* Adjusted dynamically in JS for RTL/LTR */
+            background-color: var(--accent-color);
+            color: #000;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* --- Search Bar --- */
+        .search-section {
+            padding: 2rem 0;
+        }
+
+        .search-wrapper {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border-radius: 50px;
+            border: 2px solid var(--border-color);
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        /* Adjust padding for RTL */
+        html[dir="rtl"] .search-input { padding: 15px 20px 15px 50px; }
+        html[dir="ltr"] .search-input { padding: 15px 50px 15px 20px; }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(0, 137, 123, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        html[dir="rtl"] .search-icon { right: 20px; }
+        html[dir="ltr"] .search-icon { left: 20px; }
+
+        /* --- Main Grid --- */
+        .grid-header {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        /* --- Product Card --- */
+        .product-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-img-container {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            background-color: #ddd;
+            position: relative;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .card-img {
+            transform: scale(1.05);
+        }
+
+        .category-tag {
+            position: absolute;
+            top: 10px;
+            padding: 4px 10px;
+            background-color: rgba(0, 137, 123, 0.9);
+            color: white;
+            font-size: 0.8rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+        
+        html[dir="rtl"] .category-tag { right: 10px; }
+        html[dir="ltr"] .category-tag { left: 10px; }
+
+        .card-body {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-main);
+        }
+
+        .product-id {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .add-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* --- Loading / Analysis Overlay --- */
+        #analysis-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-card);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 137, 123, 0.3);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .analysis-log {
+            font-family: monospace;
+            color: var(--text-secondary);
+            margin-top: 10px;
+            height: 20px;
+        }
+
+        /* --- Cart Modal --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-card);
+            width: 90%;
+            max-width: 500px;
+            border-radius: var(--radius);
+            padding: 25px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .modal-title { font-size: 1.3rem; font-weight: 700; color: var(--primary-color); }
+        .close-modal { font-size: 1.5rem; color: var(--text-secondary); background: none; }
+        .close-modal:hover { color: red; }
+
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cart-item img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .cart-item-details { flex-grow: 1; }
+        .cart-item-title { font-weight: 600; font-size: 0.95rem; }
+        .cart-remove {
+            color: red;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .cart-actions {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .btn-primary:hover { background-color: var(--primary-dark); }
+
+        /* --- Checkout Form --- */
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-body);
+            color: var(--text-main);
+        }
+        .form-input:focus { outline: 2px solid var(--primary-color); border-color: transparent; }
+
+        .radio-group { display: flex; gap: 15px; }
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        /* --- Toast Notification --- */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast.success { background-color: var(--primary-color); }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .product-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .card-img-container { height: 150px; }
+            .modal-content { width: 95%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading / AI Analysis Simulation -->
+    <div id="analysis-overlay">
+        <div class="spinner"></div>
+        <h2 data-i18n="loading_title">جاري تحليل المخزون...</h2>
+        <p class="analysis-log" id="analysis-log">Connecting to warehouse...</p>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container nav-wrapper">
+            <div class="logo">
+                <i class="fa-solid fa-cube"></i>
+                <span>Nadi Plast</span>
+            </div>
+            
+            <div class="nav-controls">
+                <button class="icon-btn" id="theme-toggle" title="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button class="icon-btn" id="lang-toggle" title="Switch Language">
+                    <span style="font-size: 0.9rem; font-weight: bold;">EN</span>
+                </button>
+                <button class="icon-btn" id="cart-btn" title="Cart">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="search-wrapper">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" class="search-input" id="search-input" placeholder="ابحث عن منتج (اسم، فئة، كود)..." data-i18n-placeholder="search_placeholder">
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products-section">
+            <div class="grid-header">
+                <h3 data-i18n="latest_products">أحدث المنتجات</h3>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;" id="result-count"></span>
+            </div>
+            <div class="product-grid" id="product-grid">
+                <!-- Products will be injected here by JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Nadi Plast. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Cart Modal -->
+    <div class="modal-overlay" id="cart-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" data-i18n="cart_title">سلة التسوق</h3>
+                <button class="close-modal" id="close-cart">&times;</button>
+            </div>
+            <div id="cart-items-container">
+                <!-- Cart items injected here -->
+                <p style="text-align: center; color: var(--text-secondary); padding: 20px;" data-i18n="empty_cart">السلة فارغة</p>
+            </div>
+            <div class="cart-actions">
+                <button class="btn-primary" id="checkout-btn" data-i18n="checkout">إتمام الشراء (واتساب)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal-overlay" id="checkout-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" data-i18n="checkout_details">بيانات التوصيل والدفع</h3>
+                <button class="close-modal" id="close-checkout">&times;</button>
+            </div>
+            <form id="checkout-form">
+                <div class="form-group">
+                    <label class="form-label" data-i18n="label_name">الاسم بالكامل</label>
+                    <input type="text" class="form-input" id="cust-name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="label_phone">رقم الواتساب</label>
+                    <input type="tel" class="form-input" id="cust-phone" placeholder="01xxxxxxxxx" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="label_address">عنوان التوصيل</label>
+                    <textarea class="form-input" id="cust-address" rows="2" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="label_payment">طريقة الدفع</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="payment" value="InstaPay" checked> InstaPay
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="payment" value="E-Wallet"> E-Wallet
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">
+                    <i class="fa-brands fa-whatsapp"></i> <span data-i18n="send_order">إرسال الطلب</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-check-circle"></i>
+        <span id="toast-msg">Operation successful</span>
+    </div>
+
+    <script>
+        /* --- Data & Config --- */
+        const CONFIG = {
+            warehousePhone: "201000000000", // Replace with actual store number
+            defaultLang: 'ar',
+            defaultTheme: 'light',
+            imageSeedBase: 'nadiplast' // For picsum photos
+        };
+
+        const TRANSLATIONS = {
+            ar: {
+                loading_title: "جاري تحليل المخزون...",
+                search_placeholder: "ابحث عن منتج (اسم، فئة، كود)...",
+                latest_products: "أحدث المنتجات",
+                cart_title: "سلة التسوق",
+                empty_cart: "السلة فارغة",
+                checkout: "إتمام الشراء",
+                checkout_details: "بيانات التوصيل والدفع",
+                label_name: "الاسم بالكامل",
+                label_phone: "رقم الواتساب",
+                label_address: "عنوان التوصيل",
+                label_payment: "طريقة الدفع",
+                send_order: "إرسال الطلب",
+                added_to_cart: "تمت الإضافة للسلة",
+                analyzing: "جاري تحليل الصورة: ",
+                cat_pipes: "مواسير",
+                cat_fittings: "فيتات",
+                cat_tanks: "خزانات",
+                cat_decor: "ديكور"
+            },
+            en: {
+                loading_title: "Analyzing Warehouse...",
+                search_placeholder: "Search products (name, category, code)...",
+                latest_products: "Latest Products",
+                cart_title: "Shopping Cart",
+                empty_cart: "Cart is empty",
+                checkout: "Checkout",
+                checkout_details: "Delivery & Payment",
+                label_name: "Full Name",
+                label_phone: "WhatsApp Number",
+                label_address: "Delivery Address",
+                label_payment: "Payment Method",
+                send_order: "Send Order",
+                added_to_cart: "Added to cart",
+                analyzing: "Analyzing image: ",
+                cat_pipes: "Pipes",
+                cat_fittings: "Fittings",
+                cat_tanks: "Tanks",
+                cat_decor: "Decor"
+            }
+        };
+
+        // State
+        let state = {
+            lang: CONFIG.defaultLang,
+            theme: CONFIG.defaultTheme,
+            products: [], // Will hold analyzed data
+            cart: []
+        };
+
+        /* --- Mock AI Analysis Logic --- */
+        // Simulates scanning a folder and extracting data
+        async function simulateWarehouseAnalysis() {
+            const logEl = document.getElementById('analysis-log');
+            const categories = [
+                { id: 'pipes', ar: 'مواسير', en: 'Pipes' },
+                { id: 'fittings', ar: 'فيتات', en: 'Fittings' },
+                { id: 'tanks', ar: 'خزانات', en: 'Tanks' },
+                { id: 'decor', ar: 'ديكور', en: 'Home Decor' }
+            ];
+
+            // Generate 16 mock products
+            const mockProducts = [];
+            for (let i = 1; i <= 16; i++) {
+                // Simulate processing delay for each item
+                await new Promise(r => setTimeout(r, 50)); 
+                
+                const cat = categories[Math.floor(Math.random() * categories.length)];
+                const seed = `${CONFIG.imageSeedBase}${i}`;
+                
+                mockProducts.push({
+                    id: `NP-${1000 + i}`,
+                    nameAr: `منتج ${cat.ar} نمط ${i}`,
+                    nameEn: `${cat.en} Product Style ${i}`,
+                    category: cat.id,
+                    image: `https://picsum.photos/seed/${seed}/400/300`,
+                    price: 0 // Not displayed, but structure exists
+                });
+
+                // Update log
+                logEl.textContent = `${TRANSLATIONS[state.lang].analyzing} ${seed}.jpg`;
+            }
+
+            state.products = mockProducts;
+            document.getElementById('analysis-overlay').style.display = 'none';
+            renderProducts(state.products);
+        }
+
+        /* --- DOM Elements --- */
+        const productGrid = document.getElementById('product-grid');
+        const searchInput = document.getElementById('search-input');
+        const cartModal = document.getElementById('cart-modal');
+        const checkoutModal = document.getElementById('checkout-modal');
+        const cartItemsContainer = document.getElementById('cart-items-container');
+        const cartCount = document.getElementById('cart-count');
+
+        /* --- Rendering --- */
+        function renderProducts(products) {
+            productGrid.innerHTML = '';
+            document.getElementById('result-count').textContent = `${products.length} Items`;
+
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                
+                // Determine localized name
+                const name = state.lang === 'ar' ? product.nameAr : product.nameEn;
+                const catLabel = state.lang === 'ar' 
+                    ? TRANSLATIONS.ar[`cat_${product.category}`] 
+                    : TRANSLATIONS.en[`cat_${product.category}`];
+
+                card.innerHTML = `
+                    <div class="card-img-container">
+                        <img src="${product.image}" alt="${name}" class="card-img" loading="lazy">
+                        <span class="category-tag">${catLabel}</span>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <h3 class="product-title">${name}</h3>
+                            <p class="product-id">ID: ${product.id}</p>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('${product.id}')">
+                            <i class="fa-solid fa-plus"></i> 
+                            <span data-i18n="add_to_cart">Add</span>
+                        </button>
+                    </div>
+                `;
+                productGrid.appendChild(card);
+            });
+            updateUIText();
+        }
+
+        function renderCart() {
+            cartItemsContainer.innerHTML = '';
+            cartCount.textContent = state.cart.length;
+
+            if (state.cart.length === 0) {
+                cartItemsContainer.innerHTML = `<p style="text-align: center; color: var(--text-secondary); padding: 20px;" data-i18n="empty_cart">${TRANSLATIONS[state.lang].empty_cart}</p>`;
+                return;
+            }
+
+            state.cart.forEach((item, index) => {
+                const name = state.lang === 'ar' ? item.nameAr : item.nameEn;
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                    <img src="${item.image}" alt="${name}">
+                    <div class="cart-item-details">
+                        <div class="cart-item-title">${name}</div>
+                        <div style="font-size:0.8rem; color:var(--text-secondary)">ID: ${item.id}</div>
+                        <a href="#" class="cart-remove" onclick="removeFromCart(${index})">
+                            ${state.lang === 'ar' ? 'حذف' : 'Remove'}
+                        </a>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(div);
+            });
+        }
+
+        /* --- Actions --- */
+        window.addToCart = function(id) {
+            const product = state.products.find(p => p.id === id);
+            if (product) {
+                state.cart.push(product);
+                renderCart();
+                showToast(`${state.lang === 'ar' ? 'تمت إضافة' : 'Added'}: ${state.lang === 'ar' ? product.nameAr : product.nameEn}`);
+            }
+        };
+
+        window.removeFromCart = function(index) {
+            state.cart.splice(index, 1);
+            renderCart();
+        };
+
+        /* --- Search --- */
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = state.products.filter(p => {
+                const name = state.lang === 'ar' ? p.nameAr : p.nameEn;
+                return name.toLowerCase().includes(term) || 
+                       p.id.toLowerCase().includes(term) ||
+                       p.category.includes(term);
+            });
+            renderProducts(filtered);
+        });
+
+        /* --- Checkout Logic --- */
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
+            const address = document.getElementById('cust-address').value;
+            const payment = document.querySelector('input[name="payment"]:checked').value;
+
+            // Construct WhatsApp Message
+            // Note: We can't send actual files via wa.me link, so we send detailed text and links.
+            let message = `*New Order from Nadi Plast Website*\n\n`;
+            message += `*Customer:* ${name}\n`;
+            message += `*Phone:* ${phone}\n`;
+            message += `*Address:* ${address}\n`;
+            message += `*Payment:* ${payment}\n\n`;
+            message += `*Order Items:*\n`;
+
+            state.cart.forEach((item, idx) => {
+                const itemName = state.lang === 'ar' ? item.nameAr : item.nameEn;
+                message += `${idx + 1}. ${itemName} (ID: ${item.id})\n`;
+                message += `   Image: ${item.image}\n`; // Sending link to image
+            });
+
+            // Encode and Open
+            const encodedMsg = encodeURIComponent(message);
+            const waUrl = `https://wa.me/${CONFIG.warehousePhone}?text=${encodedMsg}`;
+            
+            window.open(waUrl, '_blank');
+            
+            // Close modals and clear cart
+            checkoutModal.classList.remove('active');
+            cartModal.classList.remove('active');
+            state.cart = [];
+            renderCart();
+        });
+
+        /* --- UI Logic (Modals, Theme, Lang) --- */
+        
+        // Modals
+        document.getElementById('cart-btn').addEventListener('click', () => cartModal.classList.add('active'));
+        document.getElementById('close-cart').addEventListener('click', () => cartModal.classList.remove('active'));
+        document.getElementById('checkout-btn').addEventListener('click', () => {
+            if(state.cart.length === 0) {
+                showToast(state.lang === 'ar' ? 'السلة فارغة!' : 'Cart is empty!');
+                return;
+            }
+            cartModal.classList.remove('active');
+            checkoutModal.classList.add('active');
+        });
+        document.getElementById('close-checkout').addEventListener('click', () => checkoutModal.classList.remove('active'));
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            if (event.target == cartModal) cartModal.classList.remove('active');
+            if (event.target == checkoutModal) checkoutModal.classList.remove('active');
+        }
+
+        // Theme Toggle
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            state.theme = state.theme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', state.theme);
+            const icon = document.querySelector('#theme-toggle i');
+            icon.className = state.theme === 'light' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+        });
+
+        // Language Toggle
+        document.getElementById('lang-toggle').addEventListener('click', () => {
+            state.lang = state.lang === 'ar' ? 'en' : 'ar';
+            document.documentElement.setAttribute('lang', state.lang);
+            document.documentElement.setAttribute('dir', state.lang === 'ar' ? 'rtl' : 'ltr');
+            document.body.className = state.lang === 'ar' ? '' : 'lang-en';
+            
+            // Update toggle text
+            document.querySelector('#lang-toggle span').textContent = state.lang === 'ar' ? 'EN' : 'عربي';
+            
+            // Re-render to apply translations
+            renderProducts(state.products);
+            renderCart();
+            updateUIText();
+        });
+
+        function updateUIText() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (TRANSLATIONS[state.lang][key]) {
+                    el.textContent = TRANSLATIONS[state.lang][key];
+                }
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (TRANSLATIONS[state.lang][key]) {
+                    el.placeholder = TRANSLATIONS[state.lang][key];
+                }
+            });
+        }
+
+        // Toast
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        /* --- Initialization --- */
+        window.addEventListener('DOMContentLoaded', () => {
+            simulateWarehouseAnalysis();
+        });
+
+    </script>
+</body>
+  </html>
